@@ -1,6 +1,6 @@
 import sys, os
 import torch
-import visdom
+# import visdom
 import argparse
 import timeit
 import numpy as np
@@ -13,7 +13,7 @@ import collections
 
 from torch.autograd import Variable
 from torch.utils import data
-from tqdm import tqdm
+# from tqdm import tqdm
 
 from ptsemseg.models import get_model
 from ptsemseg.loader import get_loader, get_data_path
