@@ -32,19 +32,19 @@ class KITTIRoadLoader(data.Dataset):
         self.split = split
         self.is_transform = is_transform
         self.augmentations = augmentations
-        self.n_classes = 2
+        self.n_classes = 2   # 道路分割的类别只有两类
         self.img_size = img_size 
         self.mean = np.array(self.mean_rgb)
         self.files = {}
 
         if phase == 'train':
             self.images_base = os.path.join(self.root, 'training', 'image_2')
-            self.lidar_base = os.path.join(self.root, 'training', 'ADI')
+            self.lidar_base = os.path.join(self.root, 'training', 'ADI_train')
             self.annotations_base = os.path.join(self.root, 'training', 'gt_image_2')
             self.im_files = recursive_glob(rootdir=self.images_base, suffix='.png')
         else:
             self.images_base = os.path.join(self.root, 'testing', 'image_2')
-            self.lidar_base = os.path.join(self.root, 'testing', 'ADI')
+            self.lidar_base = os.path.join(self.root, 'testing', 'ADI_test')
             self.annotations_base = os.path.join(self.root, 'testing', 'gt_image_2')
             self.split = 'test'
 
@@ -70,10 +70,11 @@ class KITTIRoadLoader(data.Dataset):
         """
         img_path = self.im_files[index].rstrip()
         im_name_splits = img_path.split(os.sep)[-1].split('.')[0].split('_')
-
+        print("img's png: {}".format(img_path))
         img = cv2.imread(img_path)
         img = np.array(img, dtype=np.uint8)
 
+        print("lidar's png: {}".format(os.path.join(self.lidar_base, im_name_splits[0] + '_' + im_name_splits[1] + '.png')))
         lidar = cv2.imread(os.path.join(self.lidar_base, im_name_splits[0] + '_' + im_name_splits[1] + '.png'), cv2.IMREAD_UNCHANGED)
         lidar = np.array(lidar, dtype=np.uint8)
 
@@ -94,7 +95,7 @@ class KITTIRoadLoader(data.Dataset):
         else:
             tr_img = img.copy()
             tr_lidar = lidar.copy()
-            tr_img, tr_lidar = self.transform(tr_img, tr_lidar)
+            tr_img, tr_lidar = self.transform(tr_img, tr_lidar)   # test数据集采用了img和lidar以及它们的转置
     
             return img, tr_img, lidar, tr_lidar
 

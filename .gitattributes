@@ -1,0 +1,5 @@
+plard_kitti_road.pth filter=lfs diff=lfs merge=lfs -text
+plard.onnx filter=lfs diff=lfs merge=lfs -text
+plard_optim.onnx filter=lfs diff=lfs merge=lfs -text
+plard_sim.onnx filter=lfs diff=lfs merge=lfs -text
+plard_kitti_road_pth.tar.gz filter=lfs diff=lfs merge=lfs -text

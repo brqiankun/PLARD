@@ -235,6 +235,8 @@ class plard(nn.Module):
             x = x[None,...] if len(x.shape) < 4 else x
             lidar = lidar[None,...] if len(lidar.shape) < 4 else lidar
 
+        # x = inputs[0]
+        # lidar = inputs[1]
         inp_shape = x.shape[2:]
 
         with torch.no_grad():

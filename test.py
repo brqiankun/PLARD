@@ -30,7 +30,7 @@ def test(args):
     data_path = get_data_path(args.dataset)
     loader = data_loader(data_path, phase='test')
     im_paths = loader.im_paths()
-    n_classes = loader.n_classes 
+    n_classes = loader.n_classes   # n_classes = 2
     testloader = data.DataLoader(loader, batch_size=1, num_workers=1, shuffle=False)
  
     # Setup Model
@@ -50,10 +50,13 @@ def test(args):
         t0 = time.time()
         orig_h, orig_w = image.shape[1:3]
         with torch.no_grad():
+            print("input tr_image's size: {}".format(tr_image.shape))
+            print("input tr_lidar's size: {}".format(tr_lidar.shape))
             tr_image = Variable(tr_image.cuda())
             tr_lidar = Variable(tr_lidar.cuda())
             outputs = model([tr_image, tr_lidar])
-            outputs = outputs.cpu().numpy().transpose((2,3,1,0)).squeeze()
+            print("output's shape: {}".format(outputs.shape))
+            outputs = outputs.cpu().numpy().transpose((2,3,1,0)).squeeze()   # ???
             outputs = cv2.resize(outputs, (orig_w, orig_h))
             outputs = outputs[:,:,1]
 
@@ -70,7 +73,7 @@ if __name__ == '__main__':
     parser.add_argument('--model_path', nargs='?', type=str, default='fcn8s_pascal_1_26.pkl', 
                         help='Path to the saved model')
     parser.add_argument('--dataset', nargs='?', type=str, default='kitti_road', 
-                        help='Dataset to use [\'pascal, camvid, ade20k etc\']')
+                        help='Dataset to use [\'pascal, camvid, ade20k kitti_road(default) etc\']')
 
     parser.add_argument('--img_norm', dest='img_norm', action='store_true', 
                         help='Enable input image scales normalization [0, 1] | True by default')

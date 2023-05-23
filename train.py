@@ -1,6 +1,6 @@
 import sys, os
 import torch
-import visdom
+# import visdom
 import argparse
 import numpy as np
 import logging
@@ -102,12 +102,12 @@ def train(args, logger):
 
             optimizer.step()
 
-            if args.visdom:
-                vis.line(
-                    X=torch.ones((1, 1)).cpu() * i,
-                    Y=torch.Tensor([loss.data[0]]).unsqueeze(0).cpu(),
-                    win=loss_window,
-                    update='append')
+            # if args.visdom:
+            #     vis.line(
+            #         X=torch.ones((1, 1)).cpu() * i,
+            #         Y=torch.Tensor([loss.data[0]]).unsqueeze(0).cpu(),
+            #         win=loss_window,
+            #         update='append')
 
             avg_loss += loss.detach().cpu().numpy().mean() #.data.item()
             #avg_loss += loss.data.item()

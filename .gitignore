@@ -1,4 +1,4 @@
-# Byte-compiled / optimized / DLL files
+#Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
@@ -11,6 +11,11 @@ video_test*.py
 *.swp
 data
 ckpt
+
+# ONNX Models
+*.onnx
+
+*tar.gz
 
 # C extensions
 *.so
