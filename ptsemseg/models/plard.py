@@ -113,7 +113,7 @@ class plard(nn.Module):
         self.n_classes = n_classes
 
         
-        # Visual Encoder
+        # Visual Encoder  conv2D+Relu
         self.convbnrelu1_1 = conv2DBatchNormRelu(in_channels=3, k_size=3, n_filters=64,
                                                  padding=1, stride=2, bias=False)
         self.convbnrelu1_2 = conv2DBatchNormRelu(in_channels=64, k_size=3, n_filters=64,
@@ -154,7 +154,7 @@ class plard(nn.Module):
         self.inplanes = 16
         self.lidar_conv1 = nn.Conv2d(1, 16, kernel_size=7, stride=2, padding=3,
                                bias=False)
-        self.lidar_bn1 = nn.GroupNorm(4, 16)
+        self.lidar_bn1 = nn.GroupNorm(4, 16)   # onnx为reshape + instance norm + reshape
         self.lidar_layer1 = self._make_layer(block, 16, layers[0], use_gn=True) 
         self.lidar_layer2 = self._make_layer(block, 32, layers[1], stride=2, use_gn=True) 
         self.lidar_layer3 = self._make_layer(block, 64, layers[2], stride=1, dilation=2, use_gn=True) 
@@ -261,7 +261,7 @@ class plard(nn.Module):
         lidar_x_4x_tr = self.lidar_layer1_tr(lidar_x_4x)
         lidar_x_4x_tr_relu = self.relu(lidar_x_4x_tr)
 
-        cond_4x = torch.cat( (lidar_x_4x_tr_relu, x_4x_tr_relu), 1)
+        cond_4x = torch.cat( (lidar_x_4x_tr_relu, x_4x_tr_relu), 1)   # lidar/camera特征第一次融合
         alpha_4x = self.lidar_layer1_tr_alpha(cond_4x) + 1.
         beta_4x = self.lidar_layer1_tr_beta(cond_4x)
 
@@ -282,7 +282,7 @@ class plard(nn.Module):
         lidar_x_8x_tr = self.lidar_layer2_tr(lidar_x_8x)
         lidar_x_8x_tr_relu = self.relu(lidar_x_8x_tr)
 
-        cond_8x = torch.cat( (lidar_x_8x_tr_relu, x_8x_tr_relu), 1)
+        cond_8x = torch.cat( (lidar_x_8x_tr_relu, x_8x_tr_relu), 1)   #lidar/camera特征第二次融合
         alpha_8x = self.lidar_layer2_tr_alpha(cond_8x) + 1.
         beta_8x = self.lidar_layer2_tr_beta(cond_8x)
 
@@ -303,7 +303,7 @@ class plard(nn.Module):
         lidar_x_8x_res4_tr = self.lidar_layer3_tr(lidar_x_8x_res4)
         lidar_x_8x_res4_tr_relu = self.relu(lidar_x_8x_res4_tr)
 
-        cond_8x_res4 = torch.cat( (lidar_x_8x_res4_tr_relu, x_8x_res4_tr_relu), 1)
+        cond_8x_res4 = torch.cat( (lidar_x_8x_res4_tr_relu, x_8x_res4_tr_relu), 1) #特征第三次concat
         alpha_8x_res4 = self.lidar_layer3_tr_alpha(cond_8x_res4) + 1.
         beta_8x_res4 = self.lidar_layer3_tr_beta(cond_8x_res4)
 
@@ -330,7 +330,7 @@ class plard(nn.Module):
         lidar_x_8x_res5_tr = self.lidar_layer4_tr(lidar_x_8x_res5)
         lidar_x_8x_res5_tr_relu = self.relu(lidar_x_8x_res5_tr)
 
-        cond_8x_res5 = torch.cat( (lidar_x_8x_res5_tr_relu, x_8x_res5_tr_relu), 1)
+        cond_8x_res5 = torch.cat( (lidar_x_8x_res5_tr_relu, x_8x_res5_tr_relu), 1)  #concat 4
         alpha_8x_res5 = self.lidar_layer4_tr_alpha(cond_8x_res5) + 1.
         beta_8x_res5 = self.lidar_layer4_tr_beta(cond_8x_res5)
 

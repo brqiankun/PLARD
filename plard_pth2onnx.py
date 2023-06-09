@@ -35,6 +35,6 @@ if __name__ == "__main__":
   model.load_state_dict(state)
   # test with image
 
-  # convert to onnx
+  # convert to onnxpytorch  conv2d
   convert_onnx(model)
 
