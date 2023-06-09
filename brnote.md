@@ -21,6 +21,7 @@ sudo mount /dev/sda2 /media/br
 ```
 
 需要安装google protobuf  cityscapes等库， 手机无法连接外网
+pip install opencv-python  # 安装cv2
 plard 在mmseg_plard下测试跑通
 ```
 python test.py --model_path /path/to/plard_kitti_road.pth
@@ -210,3 +211,18 @@ https://github.com/nv-tlabs/lift-splat-shoot
 
 ### semantic-kitt
 http://semantic-kitti.org/resources.html#devkit
+
+
+**TODO**
+```
+torch.cuda.empty_cache()  # 清理cuda缓存
+warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")  更新API
+```
+1. 需要修改plard的模型
+```
+torch.cuda.empty_cache()  # 清理cuda缓存
+warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")  更新API
+```
+2. 为何推理不足3g, 而训练8g都不够, 或者更改模型，直接使用纯图像的方案. 删除lidar部分的分支。检测性能是否变化
+
+3. 剪枝，蒸馏？

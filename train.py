@@ -102,6 +102,7 @@ def train(args, logger):
 
             optimizer.step()
 
+            torch.cuda.empty_cache()
             # if args.visdom:
             #     vis.line(
             #         X=torch.ones((1, 1)).cpu() * i,
